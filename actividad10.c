@@ -5,11 +5,11 @@
 struct registro
 {
     char nombre[20];
-    char apellido_paterno[20];
-    char apellido_materno[20];
+    char ApPat[20];
+    char ApMat[20];
     int matricula;
     int edad;
-    char sexo;
+    char sexo[20];
     char status[20];
 };
 
@@ -17,24 +17,22 @@ char hombres[20][10] = {"JUAN", "PEDRO", "CARLOS", "LUIS", "JAVIER", "ANDRES", "
 char mujeres[20][10] = {"DANIELA", "LAURA", "ANA", "CARMEN", "SOFIA", "ISABEL", "MARTA", "PAULA", "ELENA", "PATRICIA", "LUCIA", "CLARA", "ROSA", "BEATRIZ", "CAROLINA", "JULIA", "TERESA", "SARA", "IRENE", "ADRIANA"};
 char apellidos_paternos[20][10] = {"BARRIOS", "RODRIGUEZ", "LOPEZ", "PEREZ", "MARTINEZ", "SANCHEZ", "FERNANDEZ", "GONZALEZ", "RAMIREZ", "TORRES", "MARTIN", "JIMENEZ", "RUIZ", "DIAZ", "SOTO", "GOMEZ", "LOZANO", "CASTRO", "HERRERA", "GARCIA"};
 char apellidos_maternos[20][10] = {"SUAREZ", "VILLEGAS", "GUERRERO", "PALACIOS", "FARIAS", "AVILA", "MOLINA", "SALAZAR", "DELGADO", "SANCHEZ", "FLORES", "MORALES", "ROMERO", "OROZCO", "RIVERA", "CASTILLO", "CHAVEZ", "SUAREZ", "VILLEGAS", "GUERRERO"};
-char status[4][20] = {"DADO DE BAJA", "BAJA TEMPORAL", "MATRICULADO", "EGRESADO"};
+char tipos_de_status[4][20] = {"DADO DE BAJA", "BAJA TEMPORAL", "MATRICULADO", "EGRESADO"};
+char genero[2][10] = {"HOMBRE", "MUJER"};
+void agregarautomaticamente(struct registro personas[], int *numero_persona);
+void agregarmanual(struct registro personas[], int *numero_persona);
+void eliminarregistro(struct registro personas[], int *numero_persona);
+void ordenar(struct registro personas[], int *numero_persona);
+void buscar(struct registro personas[], int numero_personas);
+void imprimir(struct registro personas[], int num_personas);
 
-void agregarautomaticamente();
-void agregarmanual();
-void eliminarregistro();
-void ordenar();
-void buscar();
-void imprimir();
 int main()
 {
     srand(time(NULL));
-    int menu;
-    int opc;
     struct registro personas[10];
-    int num_persona=0;
-    int matricula;
-    int buscar_matricula;
-    
+
+    int menu, i, opc;
+    int num_persona = 0;
     do
     {
         menu = 0;
@@ -46,134 +44,162 @@ int main()
             printf("FIN DEL PROGRAMA");
             break;
         case 1:
-            agregarautomaticamente();
+            for (i = 0; i < 10; i++)
+            {
+                agregarautomaticamente(personas, &num_persona);
+            }
             menu = repetir();
             break;
         case 2:
-            agregarmanual();
+            agregarmanual(personas, &num_persona);
             menu = repetir();
             break;
         case 3:
-
+            eliminarregistro(personas, &num_persona);
             menu = repetir();
             break;
         case 4:
-
+            buscar(personas, num_persona);
             menu = repetir();
             break;
         case 5:
-
+            ordenar(personas, &num_persona);
             menu = repetir();
             break;
         case 6:
-
+            imprimir(personas, num_persona);
             menu = repetir();
             break;
         }
     } while (menu == 1);
 }
-void agregarautomaticamente()
+void agregarautomaticamente(struct registro personas[], int *numero_persona)
 {
-    int status, Matricula, ApPat, ApMat, Nombre, Edad, Sexo;
-    Sexo = numerorandom(1, 2); // 1. Hombre  2. Mujer
+    int genero_numero;
+    struct registro *persona = &personas[*numero_persona];
+    genero_numero = rand() % 2;
+    strcpy(persona->sexo, genero[genero_numero]); // 0. Hombre  1. Mujer
 
-    if (Sexo == 1)
+    if (genero_numero == 0)
     {
-        Nombre = numerorandom(1, 20);
-        ApPat = numerorandom(1, 20);
-        ApMat = numerorandom(1, 20);
-        printf("\nRegistro de %s %s %s\n", hombres[Nombre], apellidos_paternos[ApPat], apellidos_maternos[ApMat]);
+        strcpy(persona->nombre, hombres[rand() % 20]);
     }
     else
     {
-        Nombre = numerorandom(1, 20);
-        ApPat = numerorandom(1, 20);
-        ApMat = numerorandom(1, 20);
-        printf("\nRegistro de %s %s %s\n", mujeres[Nombre], apellidos_paternos[ApPat], apellidos_maternos[ApMat]);
+        strcpy(persona->nombre, mujeres[rand() % 20]);
     }
-    status = numerorandom(1, 2);
-    if (status == 1)
-    {
-        printf("status: En linea\n");
-        Matricula = numerorandom(300000, 400000);
-        printf("matricula: %d\n", Matricula);
-        Edad = numerorandom(18, 30);
-        printf("Edad: %d\n", Edad);
-        if (Sexo == 1)
-        {
-            printf("sexo: Hombre\n\n");
-        }
-        else
-        {
-            printf("sexo: Mujer\n\n");
-        }
-    }
-    else
-    {
-        printf("status: Dado de baja\n\n");
-    }
+
+    strcpy(persona->ApPat, apellidos_paternos[rand() % 20]);
+    strcpy(persona->ApMat, apellidos_maternos[rand() % 20]);
+
+    strcpy(persona->status, tipos_de_status[rand() % 4]);
+
+    persona->matricula = numerorandom(300000, 400000);
+    persona->edad = numerorandom(18, 30);
+    (*numero_persona)++;
 }
-void agregarmanual()
+void agregarmanual(struct registro personas[], int *numero_persona)
 {
+    struct registro *persona = &personas[*numero_persona];
     int status, Matricula, Edad, Sexo;
     char nombre[10], ApPat[20], ApMat[20];
     validarletras("INGRESE SU NOMBRES: ", nombre);
+    strcpy(persona->nombre, nombre);
     validarletras("INGRESE SU Apellido Paterno: ", ApPat);
+    strcpy(persona->ApPat, ApPat);
     validarletras("INGRESE SU Apellido Materno: ", ApMat);
-    imprimircadena(nombre);
-    imprimircadena(ApPat);
-    imprimircadena(ApMat);
-    printf("\n");
-    /*
-        Sexo = validarnumeros("INGRESE SI ES:\n1.-HOMBRE\n2.-MUJER\n", 1, 2);
-        validarnumeros("CUAL SU STATUS:\n1.-En linea\n2.-Dado de baja\n", 1, 2);
+    strcpy(persona->ApMat, ApMat);
+    Matricula = validarnumeros("INGRESE SU MATRICULA: ", 1, 400000);
+    persona->matricula = Matricula;
+    Edad = validarnumeros("INGRESE SU EDAD: ", 18, 30);
+    persona->edad = Edad;
+    Sexo = validarnumeros("INGRESE SI ES:\n0.-HOMBRE\n1.-MUJER\n", 0, 1);
+    strcpy(persona->sexo, genero[Sexo]);
+    status = validarnumeros("CUAL SU STATUS:\n0.-DADO DE BAJA\n1.-BAJA TEMPORAL\n2.-MATRICULADO\n3.-EGRESADO\n", 0, 3);
+    strcpy(persona->status, tipos_de_status[status]);
+    (*numero_persona)++;
+}
+void eliminarregistro(struct registro personas[], int *numero_persona)
+{
+    int i, j, matricula, encontrado = 0;
+    matricula = validarnumeros("INGRESE LA MATRICULA DEL ALUMNO PARA ELIMINAR SU REGISTRO\n", 0, 400000);
+    for (i = 0; i <= *numero_persona; i++)
+    {
+        if (personas[i].matricula == matricula)
+        {
+            for (j = i; j <= *numero_persona; j++)
+            {
+                personas[j] = personas[j + 1];
+                encontrado = 1;
+            }
+            (*numero_persona)--;
+        }
+    }
+    if (encontrado == 0)
+    {
+        printf("NO SE ENCONTRO MATRICULA\n");
+    }
+}
+void ordenar(struct registro personas[], int *numero_persona)
+{
+    int i, j, temp;
+    for (i = 0; i < *numero_persona; i++)
+    {
+        for (j = 0; j < *numero_persona - 1; j++)
+        {
+            if (personas[j].matricula > personas[j + 1].matricula)
+            {
+                temp = personas[j].matricula;
+                personas[j].matricula = personas[j + 1].matricula;
+                personas[j + 1].matricula = temp;
+            }
+        }
+    }
+}
+void buscar(struct registro personas[], int numero_personas)
+{
+    int numero_matricula, encoontrado = 0;
+    numero_matricula = validarnumeros("INRESE LA MATRICULA\n", 300000, 400000);
 
-        if (status == 1)
+    for (int i = 0; i < numero_personas; i++)
+    {
+        if (personas[i].matricula == numero_matricula)
         {
-            printf("status: En linea\n");
-            Matricula = numerorandom(300000, 400000);
-            printf("matricula: %d\n", Matricula);
-            Edad = numerorandom(18, 30);
-            printf("Edad: %d\n", Edad);
-            if (Sexo == 1)
-            {
-                printf("sexo: Hombre\n\n");
-            }
-            else
-            {
-                printf("sexo: Mujer\n\n");
-            }
+            printf("Registro %d:\n", i + 1);
+            printf("Nombre: %s\n", personas[i].nombre);
+            printf("Apellido Paterno: %s\n", personas[i].ApPat);
+            printf("Apellido Materno: %s\n", personas[i].ApMat);
+            printf("Matrícula: %d\n", personas[i].matricula);
+            printf("Edad: %d\n", personas[i].edad);
+            printf("Sexo: %s\n", personas[i].sexo);
+            printf("Status: %s\n\n\n", personas[i].status);
+            encoontrado = 1;
         }
-        else
-        {
-            printf("status: Dado de baja\n\n");
-        }
-        */
+    }
+    if (encoontrado == 0)
+    {
+        printf("NO SE ENCONTRO LA MATRICULA\n\n");
+    }
 }
-void eliminarregistro()
+void imprimir(struct registro personas[], int numero_personas)
 {
-}
-void buscar()
-{
-}
-void imprimir(struct registro *personas, int num_personas)
-{
-    if (num_personas == 0)
+    if (numero_personas == 0)
     {
         printf("No hay registros para imprimir.\n");
         return;
     }
 
     printf("Registros almacenados:\n");
-    for (int i = 0; i < num_personas; i++)
+    for (int i = 0; i < numero_personas; i++)
     {
         printf("Registro %d:\n", i + 1);
         printf("Nombre: %s\n", personas[i].nombre);
-        printf("Apellido Paterno: %s\n", personas[i].apellido_paterno);
-        printf("Apellido Materno: %s\n", personas[i].apellido_materno);
-        printf("Matrícula: %d\n", personas[i].matricula);
+        printf("Apellido Paterno: %s\n", personas[i].ApPat);
+        printf("Apellido Materno: %s\n", personas[i].ApMat);
+        printf("Matricula: %d\n", personas[i].matricula);
         printf("Edad: %d\n", personas[i].edad);
-        printf("Sexo: %c\n", personas[i].sexo);
-        printf("Estado: %s\n", personas[i].status);
+        printf("Sexo: %s\n", personas[i].sexo);
+        printf("Status: %s\n", personas[i].status);
+        printf("============================\n");
     }
 }
