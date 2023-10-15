@@ -1,3 +1,22 @@
+// RiosRodriguezDaniel 372800
+// 12-oct-23
+/*
+ACTIVIDAD 10
+REALICE EL SIGUIENTE PROGRAMA QUE CONTENGA UN MENÚ.
+MENÚ
+1.- AGREGAR (AUTOM 10 REGISTROS)
+2.- AGREGAR MANUAL
+3- ELIMINAR REGISTRO (lógico)
+4.- BUSCAR
+5- ORDENAR
+6.- IMPRIMIR
+0.- SALIR
+UTILIZAR UN ARREGLO DE 500 REGISTROS
+SE DEBERÁ UTILIZAR ESTRUCTURAS CON LOS DATOS BÁSICOS DE UN ALUMNO ( status, Matricula, ApPat, ApMat, Nombre, Edad, Sexo )
+Busqueda y Ordenacion por campo MATRICULA
+nota: usar librería propia
+*/
+// R.R.D_act10_1_932
 #include <stdio.h>
 #include "RRD.h"
 #include <time.h>
@@ -44,7 +63,7 @@ int main()
             printf("FIN DEL PROGRAMA");
             break;
         case 1:
-            for (i = 0; i < 10; i++)
+            for (i = 0; i < 2; i++)//numero de registros aleatorios
             {
                 agregarautomaticamente(personas, &num_persona);
             }
