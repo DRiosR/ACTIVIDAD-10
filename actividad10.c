@@ -63,7 +63,7 @@ int main()
             printf("FIN DEL PROGRAMA");
             break;
         case 1:
-            for (i = 0; i < 2; i++)//numero de registros aleatorios
+            for (i = 0; i < 4; i++) 
             {
                 agregarautomaticamente(personas, &num_persona);
             }
@@ -97,7 +97,7 @@ void agregarautomaticamente(struct registro personas[], int *numero_persona)
     int genero_numero;
     struct registro *persona = &personas[*numero_persona];
     genero_numero = rand() % 2;
-    strcpy(persona->sexo, genero[genero_numero]); // 0. Hombre  1. Mujer
+    strcpy(persona->sexo, genero[genero_numero]);
 
     if (genero_numero == 0)
     {
@@ -161,16 +161,18 @@ void eliminarregistro(struct registro personas[], int *numero_persona)
 }
 void ordenar(struct registro personas[], int *numero_persona)
 {
-    int i, j, temp;
+    struct registro temp;
+
+    int i, j;
     for (i = 0; i < *numero_persona; i++)
     {
         for (j = 0; j < *numero_persona - 1; j++)
         {
             if (personas[j].matricula > personas[j + 1].matricula)
             {
-                temp = personas[j].matricula;
-                personas[j].matricula = personas[j + 1].matricula;
-                personas[j + 1].matricula = temp;
+                temp = personas[j];
+                personas[j] = personas[j + 1];
+                personas[j + 1] = temp;
             }
         }
     }
@@ -209,6 +211,8 @@ void imprimir(struct registro personas[], int numero_personas)
     }
 
     printf("Registros almacenados:\n");
+    printf("============================\n");
+
     for (int i = 0; i < numero_personas; i++)
     {
         printf("Registro %d:\n", i + 1);
